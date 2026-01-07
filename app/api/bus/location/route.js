@@ -53,39 +53,42 @@ export async function POST(request) {
         // Check if we already recorded an arrival at this stop recently (e.g., within last 2 minutes) to prevent duplicates
         const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
 
-        stopId: stop.id,
-          timestamp: {
-          gte: twoMinutesAgo
-        }
-      }
-    });
+        const { prisma } = await import('@/lib/prisma');
 
-    if (!recentArrival) {
-      const { prisma } = await import('@/lib/prisma'); // Dynamic import to prevent build-time failure
-
-      if (!recentArrival) {
-        console.log(`Bus ${busId} arrived at ${stop.name} (${stop.id})`);
-        await prisma.stopArrival.create({
-          data: {
-            busId,
-            routeId: stop.routeId,
+        const recentArrival = await prisma.stopArrival.findFirst({
+          where: {
+            busId: busId,
             stopId: stop.id,
-            timestamp: new Date()
+            timestamp: {
+              gte: twoMinutesAgo
+            }
           }
         });
+
+        if (!recentArrival) {
+          console.log(`Bus ${busId} arrived at ${stop.name} (${stop.id})`);
+          await prisma.stopArrival.create({
+            data: {
+              busId,
+              routeId: stop.routeId,
+              stopId: stop.id,
+              timestamp: new Date()
+            }
+          });
+        }
       }
     }
-  }
+
 
     return NextResponse.json({
-    message: 'Location updated successfully',
-    data: updatedBus
-  });
-} catch (error) {
-  console.error('Error updating location:', error);
-  return NextResponse.json(
-    { error: 'Internal Server Error' },
-    { status: 500 }
-  );
-}
+      message: 'Location updated successfully',
+      data: updatedBus
+    });
+  } catch (error) {
+    console.error('Error updating location:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }
