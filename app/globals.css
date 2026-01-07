@@ -1,0 +1,49 @@
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.bus-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.bus-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status.Moving { color: green; }
+.status.Stopped { color: red; }
+.status.In.Traffic { color: orange; }
