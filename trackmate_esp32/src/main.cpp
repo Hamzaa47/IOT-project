@@ -10,8 +10,7 @@
 const char* ssid = "Redmi 12";
 const char* password = "Tempest123";
 
-// REPLACE with your PC's Local IP
-// NOTE: Must be reachable from ESP32
+
 const char* serverUrl = "http://10.184.130.101:3000/api/bus/status"; 
 
 // Hardware Pins
@@ -112,10 +111,7 @@ void beepBuzzer() {
   }
 }
 
-// Simple JSON Parser (Manual extraction to avoid heavy ArduinoJson dep if not strictly needed, 
-// but ArduinoJson is safer. I'll use manual string parsing for simplicity unless I add ArduinoJson to platformio.ini)
-// Wait, I forgot to add ArduinoJson to platformio.ini. 
-// I will use manual parsing since the JSON is simple: {"status":"...","nextStop":"..."} 
+
 
 String extractJsonValue(String json, String key) {
   int keyIdx = json.indexOf("\"" + key + "\":");

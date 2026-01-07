@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getRouteAverages } from '@/lib/analyticsHelper';
+
+export const dynamic = 'force-dynamic';
 import { stops } from '@/lib/data';
 
 export async function GET() {
